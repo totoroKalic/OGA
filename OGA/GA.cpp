@@ -3,7 +3,8 @@
 /*
 类GA的初始化
 */
-GA::GA(int n, int q1, int q2, int f, double Pc, double Pm){
+GA::GA(int function_num, int n, int q1, int q2, int f, double Pc, double Pm){
+	Function_num = function_num;
 	N = n;
 	Q1 = q1;
 	Q2 = q2;
@@ -11,6 +12,24 @@ GA::GA(int n, int q1, int q2, int f, double Pc, double Pm){
 	pc = Pc;
 	pm = Pm;
 }
+
+/*
+	//获取染色体的权值
+*/
+double GA::getValue(chromosome demo){
+	if (Function_num == 1)
+		return function_one(demo);
+	else if (Function_num == 2)
+		return function_two(demo);
+	else if (Function_num == 3)
+		return function_three(demo);
+	else if (Function_num == 4)
+		return function_four(demo);
+	else if (Function_num == 5)
+		return function_five(demo);
+	//....
+}
+
 
 /*
 生成初始正交数组LM1
@@ -154,6 +173,7 @@ void GA::buildinitPoption(double range_left, double range_right){
 	*/
 	int demo_flag = get_1_A_random(N);
 	for (int i = 1; i <= S; i++){
+		pool Poption_pool;
 		double Subrange[101][3];
 		for (int j = 1; j <= N; j++){
 			if (j == demo_flag){
@@ -184,19 +204,29 @@ void GA::buildinitPoption(double range_left, double range_right){
 				int y = LM1[j][k];
 				chro_demo.S_chromosome.push_back(Selectrange[x][y]);
 			}
-			double value = function_one(chro_demo); //对函数一进行测试
+			double value = getValue(chro_demo); //对函数一进行测试
 			chro_demo.S_value = value;
-			c_pool.push_back(chro_demo);
+			//c_pool.push_back(chro_demo);
+			Select_pool.push_back(chro_demo);
 		}
+		int number = G / S;
+		sort(Select_pool.begin(), Select_pool.end(), cmp);
+		for (int j = 0; j < number; j++){
+			//cout << Select_pool[j].S_value << endl;
+			c_pool.push_back(Select_pool[j]);
+		}
+		//cout << "ok";
 	}
 	//step -- three 选择G个最小的S个染色体
-	selectChild();
+	//selectChild();
+	//cout << "____________________one_++++++++++++++" << endl;
+	//showChromosome();
 }
 
 /*
 染色体选择进行正交交叉量化
 */
-void GA::buildChild(chromosome parent_one, chromosome parent_two){
+void GA::buildChild(chromosome parent_one, chromosome parent_two,double range_left,double range_right){
 	//step -- one
 	double SolutionPlace[3][101];
 	for (int i = 0; i < N; i++){
@@ -227,6 +257,7 @@ void GA::buildChild(chromosome parent_one, chromosome parent_two){
 	//step -- three 分成F组-(随机产生F-1个不同数据，并排序)
 	int random[101];
 	int count = 1, flag = 1;
+	random[0] = 1;
 	while (count != F){
 		int demo = get_1_A_random(N - 2) + 1;
 		flag = 1;
@@ -258,14 +289,15 @@ void GA::buildChild(chromosome parent_one, chromosome parent_two){
 			}
 			chro_demo.S_chromosome.push_back(Quantize[j][LM2[i][demo]]);
 		}
-		// 染色体变异
+		//染色体变异
 		double Pm = get_0_1_random();
 		if (Pm <= pm){
 			int position = get_1_A_random(N);
-			double words = get_min_max_random(SolutionPlace[1][position], SolutionPlace[2][position]);
+			//double words = get_min_max_random(SolutionPlace[1][position], SolutionPlace[2][position]);
+			double words = get_min_max_random(range_left,range_left);
 			chro_demo.S_chromosome[position - 1] = words;
 		}
-		double value = function_one(chro_demo);
+		double value = getValue(chro_demo);
 		chro_demo.S_value = value;
 		c_pool.push_back(chro_demo);
 		chro_count++;
@@ -301,55 +333,63 @@ void GA::selectChild(){
 }
 
 /*
+初始时选择相关初始种群
+*/
+void GA::selectPoption(){
+	
+}
+
+/*
 开始遗传迭代
 */
 void GA::run(int Maxnum, int steps, double range_left, double range_right){
 	//step -- one 初始化
 	chromosome parent_one, parent_two;
 	buildinitLM();
+	buildinitLM2();
 
 	if (range_right - range_left <= 100)
 		S = 10;
 	else
 		S = 20;
+
 	buildinitPoption(range_left, range_right);
 	//step -- two 先执行Maxnum代
 
-	buildinitLM2();
-
 	for (int i = 0; i < Maxnum; i++){
+		//cout << "################################i####################################"<<endl;
+		//showChromosome();
 		if (chooseParents() == true){
 			if (Select_pool.size() % 2 == 1){
-				for (unsigned int i = 1; i < (Select_pool.size() - 1) / 2; i++){
+				for (unsigned int i = 1; i < ((Select_pool.size() - 1) / 2); i++){
 					parent_one = Select_pool[i];
 					parent_two = Select_pool[Select_pool.size() - i];
-					buildChild(parent_one, parent_two);
+					buildChild(parent_one, parent_two,range_left,range_right);
 				}
-				selectChild();
 			}
 			else{
 				for (unsigned int i = 0; i < Select_pool.size() / 2; i++){
 					parent_one = Select_pool[i];
 					parent_two = Select_pool[Select_pool.size() - i - 1];
-					buildChild(parent_one, parent_two);
+					buildChild(parent_one, parent_two, range_left, range_right);
 				}
-				selectChild();
 			}
 		}
-		else
-			continue;
+		selectChild();
 	}
+	int over_count = 0;
 	while (true){
 		double last = c_pool[0].S_value;
 		double now = 0;
 		int flag = 0;	//flag = 1时，说明在后50代中有进一步较小染色体成本
 		for (int i = 0; i < steps; i++){
+			over_count++;
 			if (chooseParents() == true){
 				if (Select_pool.size() % 2 == 1){
 					for (unsigned int i = 1; i < (Select_pool.size() - 1) / 2; i++){
 						parent_one = Select_pool[i];
 						parent_two = Select_pool[Select_pool.size() - i];
-						buildChild(parent_one, parent_two);
+						buildChild(parent_one, parent_two,range_left,range_right);
 					}
 					selectChild();
 				}
@@ -357,7 +397,7 @@ void GA::run(int Maxnum, int steps, double range_left, double range_right){
 					for (unsigned int i = 0; i < Select_pool.size() / 2; i++){
 						parent_one = Select_pool[i];
 						parent_two = Select_pool[Select_pool.size() - i - 1];
-						buildChild(parent_one, parent_two);
+						buildChild(parent_one, parent_two,range_left, range_right);
 					}
 					selectChild();
 				}
@@ -368,8 +408,10 @@ void GA::run(int Maxnum, int steps, double range_left, double range_right){
 			else
 				continue;
 		}
-		if (flag == 0)
+		if (flag == 0){
+			cout << "*****************" << over_count << endl;
 			break;
+		}
 	}
 }
 
@@ -399,21 +441,27 @@ int GA::get_func_evalua(){
 */
 void GA::showChromosome(){
 	int len = c_pool.size();
-	cout << endl;
+	//cout <<"_______________"<< c_pool[1].S_chromosome.size()<<endl;
+	//cout << endl;
 	for (int i = 0; i < len; i++){
+		/*
 		int len_two = c_pool[i].S_chromosome.size();
 		for (int j = 0; j < len_two; j++){
 			cout << c_pool[i].S_chromosome[j] << "    ";
 		}
+		*/
+		cout << c_pool[i].S_value;
 		cout << endl;
 	}
 }
 
 int main(){
-	GA test(30, 29, 3, 4, 0.10, 0.02);
-	test.run(1000, 50, -500, 500);
+	GA test(1,30, 29, 3, 4, 0.10, 0.02);
+	test.run(1000, 50, -500.0, 500.0);
 
 	cout << test.get_best_value() << endl;
+	cout << test.get_func_evalua() << endl;
+	
 	system("pause");
 	return 0;
 }
