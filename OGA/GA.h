@@ -31,6 +31,7 @@ private:
 
 	pool c_pool;				//G种群池
 	pool Select_pool;			//选择后的父代存储池
+	pool Poption_pool;
 	bool chooseParents();		//选择一个染色体
 	void selectChild();			//对c_pool选择最小的S个种群
 	void selectPoption();		//初始时选择相关初始种群

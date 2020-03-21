@@ -172,8 +172,8 @@ void GA::buildinitPoption(double range_left, double range_right){
 	}
 	*/
 	int demo_flag = get_1_A_random(N);
+	Poption_pool.clear();
 	for (int i = 1; i <= S; i++){
-		pool Poption_pool;
 		double Subrange[101][3];
 		for (int j = 1; j <= N; j++){
 			if (j == demo_flag){
@@ -206,19 +206,19 @@ void GA::buildinitPoption(double range_left, double range_right){
 			}
 			double value = getValue(chro_demo); //对函数一进行测试
 			chro_demo.S_value = value;
-			//c_pool.push_back(chro_demo);
-			Select_pool.push_back(chro_demo);
+			c_pool.push_back(chro_demo);
+			//Select_pool.push_back(chro_demo);
 		}
-		int number = G / S;
-		sort(Select_pool.begin(), Select_pool.end(), cmp);
-		for (int j = 0; j < number; j++){
+		//int number = G / S;
+		//sort(Select_pool.begin(), Select_pool.end(), cmp);
+		//for (int j = 0; j < number; j++){
 			//cout << Select_pool[j].S_value << endl;
-			c_pool.push_back(Select_pool[j]);
-		}
+			//c_pool.push_back(Select_pool[j]);
+		//}
 		//cout << "ok";
 	}
 	//step -- three 选择G个最小的S个染色体
-	//selectChild();
+	selectChild();
 	//cout << "____________________one_++++++++++++++" << endl;
 	//showChromosome();
 }
@@ -257,7 +257,7 @@ void GA::buildChild(chromosome parent_one, chromosome parent_two,double range_le
 	//step -- three 分成F组-(随机产生F-1个不同数据，并排序)
 	int random[101];
 	int count = 1, flag = 1;
-	random[0] = 1;
+	random[0] = 0;
 	while (count != F){
 		int demo = get_1_A_random(N - 2) + 1;
 		flag = 1;
@@ -279,22 +279,24 @@ void GA::buildChild(chromosome parent_one, chromosome parent_two,double range_le
 	for (int i = 1; i <= LM2_row; i++){
 		chromosome chro_demo;
 		chro_demo.S_chromosome.clear();
+		chro_demo.S_value = 0;
+		int LM2_postion;
 		for (int j = 1; j <= N; j++){
-			int demo;
 			for (int k = 1; k <= F; k++){
 				if (j <= random[k] && j > random[k - 1]){
-					demo = k;
+					LM2_postion = k;
 					break;
 				}
 			}
-			chro_demo.S_chromosome.push_back(Quantize[j][LM2[i][demo]]);
+			//cout << LM2_postion;
+			chro_demo.S_chromosome.push_back(Quantize[j][LM2[i][LM2_postion]]);
 		}
 		//染色体变异
 		double Pm = get_0_1_random();
 		if (Pm <= pm){
 			int position = get_1_A_random(N);
 			//double words = get_min_max_random(SolutionPlace[1][position], SolutionPlace[2][position]);
-			double words = get_min_max_random(range_left,range_left);
+			double words = get_min_max_random(range_left,range_right);
 			chro_demo.S_chromosome[position - 1] = words;
 		}
 		double value = getValue(chro_demo);
