@@ -6,11 +6,16 @@
 #include <iostream>
 #include "chromosome.h"
 #include <math.h>
+#include <fstream>
+#include <iomanip>
 
 #define PI 3.14159265
 
 class GA{
 public:
+
+	vector<double> Tu;
+
 	GA(int function_num,int N, int Q1, int Q2, int F, double pc, double pm);
 
 	void run(int Maxnum, int steps, double range_left, double range_right);            //开始迭代
@@ -18,6 +23,8 @@ public:
 	chromosome get_best_chro();	    //获得最优的种群
 	int get_func_evalua();			//获得这次迭代的function evaluations
 	void build();
+	void print();
+
 private:
 	int G = 200;	// 种群规模
 	double pc;		// 交叉概率

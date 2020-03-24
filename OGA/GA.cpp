@@ -30,7 +30,6 @@ double GA::getValue(chromosome demo){
 	//....
 }
 
-
 /*
 生成初始正交数组LM1
 */
@@ -378,6 +377,10 @@ void GA::run(int Maxnum, int steps, double range_left, double range_right){
 			}
 		}
 		selectChild();
+		double dddd = 0;
+		for (int ll = 0; ll < G; ll++)
+			dddd += c_pool[ll].S_value;
+		Tu.push_back(dddd / G);
 	}
 	int over_count = 0;
 	while (true){
@@ -394,6 +397,10 @@ void GA::run(int Maxnum, int steps, double range_left, double range_right){
 						buildChild(parent_one, parent_two,range_left,range_right);
 					}
 					selectChild();
+					double dddd = 0;
+					for (int ll = 0; ll < G; ll++)
+						dddd += c_pool[ll].S_value;
+					Tu.push_back(dddd / G);
 				}
 				else{
 					for (unsigned int i = 0; i < Select_pool.size() / 2; i++){
@@ -402,6 +409,10 @@ void GA::run(int Maxnum, int steps, double range_left, double range_right){
 						buildChild(parent_one, parent_two,range_left, range_right);
 					}
 					selectChild();
+					double dddd = 0;
+					for (int ll = 0; ll < G; ll++)
+						dddd += c_pool[ll].S_value;
+					Tu.push_back(dddd / G);
 				}
 				now = c_pool[0].S_value;
 				if (now < last)
@@ -411,7 +422,7 @@ void GA::run(int Maxnum, int steps, double range_left, double range_right){
 				continue;
 		}
 		if (flag == 0){
-			cout << "*****************" << over_count << endl;
+			//cout << "*****************" << over_count << endl;
 			break;
 		}
 	}
@@ -457,12 +468,26 @@ void GA::showChromosome(){
 	}
 }
 
+void GA::print(){
+	ofstream ofile;
+	ofile.open("E:\\data.txt");
+	int len = Tu.size();
+	for (int i = 0; i < len; i++){
+		ofile << i << "," << Tu[i] << endl;
+	}
+	ofile.close();
+}
+
 int main(){
+	cout << "测试函数---one" << endl;
+	cout << "实际最小解: -12569.5" << endl;
 	GA test(1,30, 29, 3, 4, 0.10, 0.02);
 	test.run(1000, 50, -500.0, 500.0);
+	test.print();
 
+	cout << "使用正交设计算法的最小解: ";
 	cout << test.get_best_value() << endl;
-	cout << test.get_func_evalua() << endl;
+	//cout << test.get_func_evalua() << endl;
 	
 	system("pause");
 	return 0;
