@@ -67,10 +67,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="chromosome.h" />
-    <ClInclude Include="GA.h" />
+    <ClInclude Include="function.h" />
+    <ClInclude Include="OGA.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GA.cpp" />
+    <ClCompile Include="function.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="OGA.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

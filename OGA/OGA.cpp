@@ -2,6 +2,13 @@
 #include "function.h"
 
 /*
+染色体排序
+*/
+bool cmp(chromosome A, chromosome B){
+	return A.S_value < B.S_value;
+}
+
+/*
 类GA的初始化
 */
 OGA::OGA(int function_num, int n, int q1, int q2, int f, double Pc, double Pm){
@@ -15,20 +22,11 @@ OGA::OGA(int function_num, int n, int q1, int q2, int f, double Pc, double Pm){
 }
 
 /*
-	//获取染色体的权值
+//获取染色体的权值
 */
 double OGA::getValue(chromosome demo){
-	if (Function_num == 1)
-		return function_one(demo);
-	else if (Function_num == 2)
-		return function_two(demo);
-	else if (Function_num == 3)
-		return function_three(demo);
-	else if (Function_num == 4)
-		return function_four(demo);
-	else if (Function_num == 5)
-		return function_five(demo);
-	//....
+	Func num(Function_num, demo);
+	return num.getValue();
 }
 
 /*
@@ -171,10 +169,10 @@ void OGA::buildinitPoption(double range_left, double range_right){
 	}
 	}
 	*/
-	int demo_flag = get_1_A_random(N);
+	int demo_flag = Func::get_1_A_random(N);
 	Poption_pool.clear();
 	for (int i = 1; i <= S; i++){
-		double Subrange[101][3];
+		double Subrange[102][3];
 		for (int j = 1; j <= N; j++){
 			if (j == demo_flag){
 				Subrange[j][1] = range[j][1] + (i - 1)*((range[j][2] - range[j][1]) / S);
@@ -185,7 +183,7 @@ void OGA::buildinitPoption(double range_left, double range_right){
 				Subrange[j][2] = range[j][2];
 			}
 		}
-		double Selectrange[101][50];
+		double Selectrange[101][200];
 		for (int j = 1; j <= N; j++){
 			Selectrange[j][1] = Subrange[j][1];
 			for (int k = 2; k <= Q1 - 1; k++){
@@ -212,8 +210,8 @@ void OGA::buildinitPoption(double range_left, double range_right){
 		//int number = G / S;
 		//sort(Select_pool.begin(), Select_pool.end(), cmp);
 		//for (int j = 0; j < number; j++){
-			//cout << Select_pool[j].S_value << endl;
-			//c_pool.push_back(Select_pool[j]);
+		//cout << Select_pool[j].S_value << endl;
+		//c_pool.push_back(Select_pool[j]);
 		//}
 		//cout << "ok";
 	}
@@ -226,7 +224,7 @@ void OGA::buildinitPoption(double range_left, double range_right){
 /*
 染色体选择进行正交交叉量化
 */
-void OGA::buildChild(chromosome parent_one, chromosome parent_two,double range_left,double range_right){
+void OGA::buildChild(chromosome parent_one, chromosome parent_two, double range_left, double range_right){
 	//step -- one
 	double SolutionPlace[3][101];
 	for (int i = 0; i < N; i++){
@@ -259,7 +257,7 @@ void OGA::buildChild(chromosome parent_one, chromosome parent_two,double range_l
 	int count = 1, flag = 1;
 	random[0] = 0;
 	while (count != F){
-		int demo = get_1_A_random(N - 2) + 1;
+		int demo = Func::get_1_A_random(N - 2) + 1;
 		flag = 1;
 		for (int j = 1; j <= count - 1; j++){
 			if (random[j] == demo){
@@ -292,11 +290,11 @@ void OGA::buildChild(chromosome parent_one, chromosome parent_two,double range_l
 			chro_demo.S_chromosome.push_back(Quantize[j][LM2[i][LM2_postion]]);
 		}
 		//染色体变异
-		double Pm = get_0_1_random();
+		double Pm = Func::get_0_1_random();
 		if (Pm <= pm){
-			int position = get_1_A_random(N);
+			int position = Func::get_1_A_random(N);
 			//double words = get_min_max_random(SolutionPlace[1][position], SolutionPlace[2][position]);
-			double words = get_min_max_random(range_left,range_right);
+			double words = Func::get_min_max_random(range_left, range_right);
 			chro_demo.S_chromosome[position - 1] = words;
 		}
 		double value = getValue(chro_demo);
@@ -313,7 +311,7 @@ bool OGA::chooseParents(){
 	Select_pool.clear();
 	int len = c_pool.size();
 	for (int i = 0; i < len; i++){
-		double demo = get_0_1_random();
+		double demo = Func::get_0_1_random();
 		if (demo <= pc){
 			Select_pool.push_back(c_pool[i]);
 		}
@@ -338,7 +336,7 @@ void OGA::selectChild(){
 初始时选择相关初始种群
 */
 void OGA::selectPoption(){
-	
+
 }
 
 /*
@@ -366,7 +364,7 @@ void OGA::run(int Maxnum, int steps, double range_left, double range_right){
 				for (unsigned int i = 1; i < ((Select_pool.size() - 1) / 2); i++){
 					parent_one = Select_pool[i];
 					parent_two = Select_pool[Select_pool.size() - i];
-					buildChild(parent_one, parent_two,range_left,range_right);
+					buildChild(parent_one, parent_two, range_left, range_right);
 				}
 			}
 			else{
@@ -395,7 +393,7 @@ void OGA::run(int Maxnum, int steps, double range_left, double range_right){
 					for (unsigned int i = 1; i < (Select_pool.size() - 1) / 2; i++){
 						parent_one = Select_pool[i];
 						parent_two = Select_pool[Select_pool.size() - i];
-						buildChild(parent_one, parent_two,range_left,range_right);
+						buildChild(parent_one, parent_two, range_left, range_right);
 					}
 					selectChild();
 					double dddd = 0;
@@ -407,7 +405,7 @@ void OGA::run(int Maxnum, int steps, double range_left, double range_right){
 					for (unsigned int i = 0; i < Select_pool.size() / 2; i++){
 						parent_one = Select_pool[i];
 						parent_two = Select_pool[Select_pool.size() - i - 1];
-						buildChild(parent_one, parent_two,range_left, range_right);
+						buildChild(parent_one, parent_two, range_left, range_right);
 					}
 					selectChild();
 					double dddd = 0;
@@ -461,7 +459,7 @@ void OGA::showChromosome(){
 		/*
 		int len_two = c_pool[i].S_chromosome.size();
 		for (int j = 0; j < len_two; j++){
-			cout << c_pool[i].S_chromosome[j] << "    ";
+		cout << c_pool[i].S_chromosome[j] << "    ";
 		}
 		*/
 		cout << c_pool[i].S_value;
@@ -477,19 +475,4 @@ void OGA::print(){
 		ofile << i << "," << Tu[i] << endl;
 	}
 	ofile.close();
-}
-
-int main(){
-	cout << "测试函数---one" << endl;
-	cout << "实际最小解: -12569.5" << endl;
-	OGA test(1,30, 29, 3, 4, 0.10, 0.02);
-	test.run(1000, 50, -500.0, 500.0);
-	test.print();
-
-	cout << "使用正交设计算法的最小解: ";
-	cout << test.get_best_value() << endl;
-	//cout << test.get_func_evalua() << endl;
-	
-	system("pause");
-	return 0;
 }
