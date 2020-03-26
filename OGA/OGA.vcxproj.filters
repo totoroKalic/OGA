@@ -15,19 +15,22 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="function.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="OGA.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
     <ClInclude Include="chromosome.h">
       <Filter>源文件</Filter>
     </ClInclude>
-    <ClInclude Include="GA.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="GA.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="OGA.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

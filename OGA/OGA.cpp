@@ -1,9 +1,10 @@
-#include "GA.h"
+#include "OGA.h"
+#include "function.h"
 
 /*
 类GA的初始化
 */
-GA::GA(int function_num, int n, int q1, int q2, int f, double Pc, double Pm){
+OGA::OGA(int function_num, int n, int q1, int q2, int f, double Pc, double Pm){
 	Function_num = function_num;
 	N = n;
 	Q1 = q1;
@@ -16,7 +17,7 @@ GA::GA(int function_num, int n, int q1, int q2, int f, double Pc, double Pm){
 /*
 	//获取染色体的权值
 */
-double GA::getValue(chromosome demo){
+double OGA::getValue(chromosome demo){
 	if (Function_num == 1)
 		return function_one(demo);
 	else if (Function_num == 2)
@@ -33,7 +34,7 @@ double GA::getValue(chromosome demo){
 /*
 生成初始正交数组LM1
 */
-void GA::buildinitLM(){
+void OGA::buildinitLM(){
 	//step -- one
 	int N_demo;		//N`的值和J的值
 	int row, col;
@@ -90,7 +91,7 @@ void GA::buildinitLM(){
 /*
 生成初始正交数组LM2
 */
-void GA::buildinitLM2(){
+void OGA::buildinitLM2(){
 	//step -- one
 	int F_demo;		//F`的值和J的值
 	int row, col;
@@ -149,7 +150,7 @@ void GA::buildinitLM2(){
 维度：D = N
 分成子空间：S
 */
-void GA::buildinitPoption(double range_left, double range_right){
+void OGA::buildinitPoption(double range_left, double range_right){
 	//step -- one 初始化
 	double range[101][3];
 
@@ -225,7 +226,7 @@ void GA::buildinitPoption(double range_left, double range_right){
 /*
 染色体选择进行正交交叉量化
 */
-void GA::buildChild(chromosome parent_one, chromosome parent_two,double range_left,double range_right){
+void OGA::buildChild(chromosome parent_one, chromosome parent_two,double range_left,double range_right){
 	//step -- one
 	double SolutionPlace[3][101];
 	for (int i = 0; i < N; i++){
@@ -308,7 +309,7 @@ void GA::buildChild(chromosome parent_one, chromosome parent_two,double range_le
 /*
 选择一个染色体作为父代染色体
 */
-bool GA::chooseParents(){
+bool OGA::chooseParents(){
 	Select_pool.clear();
 	int len = c_pool.size();
 	for (int i = 0; i < len; i++){
@@ -327,7 +328,7 @@ bool GA::chooseParents(){
 /*
 对c_pool选择最小的S个种群
 */
-void GA::selectChild(){
+void OGA::selectChild(){
 	int len = c_pool.size();
 	sort(c_pool.begin(), c_pool.end(), cmp);
 	c_pool.erase(c_pool.begin() + G, c_pool.end());
@@ -336,14 +337,14 @@ void GA::selectChild(){
 /*
 初始时选择相关初始种群
 */
-void GA::selectPoption(){
+void OGA::selectPoption(){
 	
 }
 
 /*
 开始遗传迭代
 */
-void GA::run(int Maxnum, int steps, double range_left, double range_right){
+void OGA::run(int Maxnum, int steps, double range_left, double range_right){
 	//step -- one 初始化
 	chromosome parent_one, parent_two;
 	buildinitLM();
@@ -431,28 +432,28 @@ void GA::run(int Maxnum, int steps, double range_left, double range_right){
 /*
 获得染色体中最优的权值
 */
-double GA::get_best_value(){
+double OGA::get_best_value(){
 	return c_pool[0].S_value;
 }
 
 /*
 获得最优的种群
 */
-chromosome GA::get_best_chro(){
+chromosome OGA::get_best_chro(){
 	return c_pool[0];
 }
 
 /*
 获得这次迭代的function evaluations
 */
-int GA::get_func_evalua(){
+int OGA::get_func_evalua(){
 	return chro_count;
 }
 
 /*
 展示染色体
 */
-void GA::showChromosome(){
+void OGA::showChromosome(){
 	int len = c_pool.size();
 	//cout <<"_______________"<< c_pool[1].S_chromosome.size()<<endl;
 	//cout << endl;
@@ -468,7 +469,7 @@ void GA::showChromosome(){
 	}
 }
 
-void GA::print(){
+void OGA::print(){
 	ofstream ofile;
 	ofile.open("E:\\data.txt");
 	int len = Tu.size();
@@ -481,7 +482,7 @@ void GA::print(){
 int main(){
 	cout << "测试函数---one" << endl;
 	cout << "实际最小解: -12569.5" << endl;
-	GA test(1,30, 29, 3, 4, 0.10, 0.02);
+	OGA test(1,30, 29, 3, 4, 0.10, 0.02);
 	test.run(1000, 50, -500.0, 500.0);
 	test.print();
 
