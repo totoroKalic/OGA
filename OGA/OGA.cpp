@@ -150,6 +150,7 @@ void OGA::buildinitLM2(){
 */
 void OGA::buildinitPoption(double range_left, double range_right){
 	//step -- one ≥ı ºªØ
+	c_pool.clear();
 	double range[101][3];
 
 	for (int i = 1; i <= N; i++){
