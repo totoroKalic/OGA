@@ -291,8 +291,8 @@ double Func::function_fourteen(chromosome chro){
 	double demo = 0, demo_two = 0;
 	for (int i = 0; i < len; i++){
 		demo = 0;
-		for (int j = 0; j <= i; i++){
-			demo += chro.S_chromosome[i];
+		for (int j = 0; j <= i; j++){
+			demo += chro.S_chromosome[j];
 		}
 		demo_two += pow(demo, 2);
 	}

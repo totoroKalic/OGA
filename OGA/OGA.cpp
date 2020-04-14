@@ -4,9 +4,11 @@
 /*
 染色体排序
 */
+/*
 bool cmp(chromosome A, chromosome B){
 	return A.S_value < B.S_value;
 }
+*/
 
 /*
 类GA的初始化

@@ -15,13 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="function.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
     <ClInclude Include="OGA.h">
       <Filter>源文件</Filter>
     </ClInclude>
     <ClInclude Include="chromosome.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="function.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CGA.h">
       <Filter>源文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -36,6 +39,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="function.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CGA.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

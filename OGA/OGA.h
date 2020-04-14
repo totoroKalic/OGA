@@ -44,3 +44,4 @@ private:
 	void showChromosome();			//展示染色体
 	double getValue(chromosome demo);				//获取染色体的值
 };
+

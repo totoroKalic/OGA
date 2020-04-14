@@ -9,3 +9,7 @@ struct chromosome{
 
 #define pool vector<struct chromosome>
 
+
+inline bool cmp(chromosome A, chromosome B) {
+	return A.S_value < B.S_value;
+}
