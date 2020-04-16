@@ -17,7 +17,6 @@ public:
 	double get_best_value();	    //获得染色体中最优的权值
 	chromosome get_best_chro();	    //获得最优的种群
 	int get_func_evalua();			//获得这次迭代的function evaluations
-	void build();
 	void print();
 
 private:
@@ -25,7 +24,7 @@ private:
 	double pc;		// 交叉概率
 	double pm;		// 变异概率
 	int Function_num;
-	int chro_count = 0;
+	int func_evalue = 0;
 	int N, Q1, Q2, J, F, J_two, S;			//函数的维度，LM2的F,J_two
 	int LM1_row, LM1_col, LM2_row, LM2_col;       //LM1和LM2数组的横纵
 	int LM1[10000][200];      //正交数组LM1
@@ -33,7 +32,6 @@ private:
 
 	pool c_pool;				//G种群池
 	pool Select_pool;			//选择后的父代存储池
-	pool Poption_pool;
 	bool chooseParents();		//选择一个染色体
 	void selectChild();			//对c_pool选择最小的S个种群
 	void selectPoption();		//初始时选择相关初始种群
