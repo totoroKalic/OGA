@@ -14,6 +14,7 @@ bool cmp(chromosome A, chromosome B){
 类GA的初始化
 */
 OGA::OGA(int function_num, int n, int q1, int q2, int f, double Pc, double Pm){
+	num.getNum(function_num);
 	Function_num = function_num;
 	N = n;
 	Q1 = q1;
@@ -27,9 +28,8 @@ OGA::OGA(int function_num, int n, int q1, int q2, int f, double Pc, double Pm){
 //获取染色体的权值
 */
 double OGA::getValue(chromosome demo){
-	Func num(Function_num, demo);
 	func_evalue++;
-	return num.getValue();
+	return num.getValue(demo);
 }
 
 /*
@@ -166,7 +166,7 @@ void OGA::buildinitPoption(double range_left, double range_right){
 		range[i][2] = range_right;
 	}
 	//step -- two 分成S个子空间，第一个代表维度
-	int demo_flag = Func::get_1_A_random(N);
+	int demo_flag = num.get_1_A_random(N);
 	for (int i = 1; i <= S; i++){
 		double Subrange[102][3];
 		for (int j = 1; j <= N; j++){
@@ -244,7 +244,7 @@ void OGA::buildChild(chromosome parent_one, chromosome parent_two, double range_
 	int count = 1, flag = 1;
 	random[0] = 0;
 	while (count != F){
-		int demo = Func::get_1_A_random(N - 2) + 1;
+		int demo = num.get_1_A_random(N - 2) + 1;
 		flag = 1;
 		for (int j = 1; j <= count - 1; j++){
 			if (random[j] == demo){
@@ -277,12 +277,12 @@ void OGA::buildChild(chromosome parent_one, chromosome parent_two, double range_
 			chro_demo.S_chromosome.push_back(Quantize[j][LM2[i][LM2_postion]]);
 		}
 		//染色体变异
-		double Pm = Func::get_0_1_random();
+		double Pm = num.get_0_1_random();
 		if (Pm <= pm){
-			int position = Func::get_1_A_random(N);
+			int position = num.get_1_A_random(N);
 			//cout << position << " ......"<<endl;
 			//double words = get_min_max_random(SolutionPlace[1][position], SolutionPlace[2][position]);
-			double words = Func::get_min_max_random(range_left, range_right);
+			double words = num.get_min_max_random(range_left, range_right);
 			chro_demo.S_chromosome[position - 1] = words;
 		}
 		double value = getValue(chro_demo);
@@ -298,7 +298,7 @@ bool OGA::chooseParents(){
 	Select_pool.clear();
 	int len = c_pool.size();
 	for (int i = 0; i < len; i++){
-		double demo = Func::get_0_1_random();
+		double demo = num.get_0_1_random();
 		if (demo <= pc){
 			Select_pool.push_back(c_pool[i]);
 		}
@@ -343,6 +343,8 @@ void OGA::run(int Maxnum, int steps, double range_left, double range_right){
 	buildinitPoption(range_left, range_right);
 	//step -- two 先执行Maxnum代
 
+	cout << "two" << endl;
+
 	for (int i = 0; i < Maxnum; i++){
 		if (chooseParents() == true){
 			if (Select_pool.size() % 2 == 1){
@@ -361,6 +363,7 @@ void OGA::run(int Maxnum, int steps, double range_left, double range_right){
 			}
 		}
 		selectChild();
+		cout << i <<"  "<<c_pool[0].S_value<< endl;
 		/*
 		double dddd = 0;
 		for (int ll = 0; ll < G; ll++)

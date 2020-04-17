@@ -1,55 +1,21 @@
 #include "function.h"
 
-Func::Func(int number, chromosome chro){
-	switch (number)
-	{
-	case 1:
-		value = function_one(chro);
-		break;
-	case 2:
-		value = function_two(chro);
-		break;
-	case 3:
-		value = function_three(chro);
-		break;
-	case 4:
-		value = function_four(chro);
-		break;
-	case 5:
-		value = function_five(chro);
-		break;
-	case 6:
-		value = function_six(chro);
-		break;
-	case 7:
-		value = function_seven(chro);
-		break;
-	case 8:
-		value = function_eight(chro);
-		break;
-	case 9:
-		value = function_nine(chro);
-		break;
-	case 10:
-		value = function_ten(chro);
-		break;
-	case 11:
-		value = function_eleven(chro);
-		break;
-	case 12:
-		value = function_twelve(chro);
-		break;
-	case 13:
-		value = function_thirteen(chro);
-		break;
-	case 14:
-		value = function_fourteen(chro);
-		break;
-	case 15:
-		value = function_fifteen(chro);
-		break;
+Func::Func() {
+}
+
+void Func::getNum(int number) {
+	Num = number;
+	if (number == 8) {
+		for (int i = 0; i < 100; i++) {
+			for (int j = 0; j < 100; j++) {
+				X[i][j] = get_min_max_random(-100, 100);
+				Y[i][j] = get_min_max_random(-100, 100);
+			}
+			Z[i] = get_min_max_random(-PI, PI);
+		}
 	}
 }
+
 /*
 生成0-1的随机数(double)
 */
@@ -192,11 +158,11 @@ double Func::function_six(chromosome chro){
 测试函数function seven
 */
 double Func::function_seven(chromosome chro){
-	double demo_one = 0, demo_two = 0;
+	double demo_one = 0;
 	int len = chro.S_chromosome.size();
 
 	for (int i = 0; i < len; i++){
-		demo_one += sin(chro.S_chromosome[i])*pow(sin((i + 1)*pow(chro.S_chromosome[i], 2)) / PI, 20);
+		demo_one += sin(chro.S_chromosome[i])*pow(sin(((i + 1)*pow(chro.S_chromosome[i], 2)) / PI), 20);
 	}
 	return -1 * demo_one;
 }
@@ -204,6 +170,7 @@ double Func::function_seven(chromosome chro){
 /*
 测试函数function eight
 */
+/*
 double Func::function_eight(chromosome chro){
 	int len = chro.S_chromosome.size();
 	double X_ij, Y_ij, W_j, demo_one = 0, demo_two = 0, demo_three = 0;
@@ -215,6 +182,23 @@ double Func::function_eight(chromosome chro){
 
 			demo_one += (X_ij * sin(W_j) + Y_ij*cos(W_j));
 			demo_two += (X_ij * sin(chro.S_chromosome[j]) + Y_ij*cos(chro.S_chromosome[j]));
+		}
+		demo_three += pow(demo_one - demo_two, 2);
+	}
+	return demo_three;
+}
+*/
+double Func::function_eight(chromosome chro) {
+	int len = chro.S_chromosome.size();
+	double X_ij, Y_ij, W_j, demo_one = 0, demo_two = 0, demo_three = 0;
+	for (int i = 0; i < len; i++) {
+		for (int j = 0; j < len; j++) {
+			X_ij = X[i][j];
+			Y_ij = Y[i][j];
+			W_j = Z[j];
+
+			demo_one += (X_ij * sin(W_j) + Y_ij * cos(W_j));
+			demo_two += (X_ij * sin(chro.S_chromosome[j]) + Y_ij * cos(chro.S_chromosome[j]));
 		}
 		demo_three += pow(demo_one - demo_two, 2);
 	}
@@ -238,10 +222,14 @@ double Func::function_nine(chromosome chro){
 测试函数function ten
 */
 double Func::function_ten(chromosome chro){
-	int len = chro.S_chromosome.size();
-	double demo = 0;
-	for (int i = 0; i < len - 1; i++){
-		demo += 100 * pow(chro.S_chromosome[i] - chro.S_chromosome[i + 1], 2) + pow(chro.S_chromosome[i] - 1, 2);
+	int len = chro.S_chromosome.size() - 1 ;
+	double demo = 0,one = 0,two = 0,three = 0,four;
+	for (int i = 0; i < len; i++){
+		one = chro.S_chromosome[i] - chro.S_chromosome[i + 1];
+		two = pow(one, 2);
+		three = pow(chro.S_chromosome[i] - 1, 2);
+		four = 100 * two + three;
+		demo += four;
 	}
 	return demo;
 }
@@ -304,8 +292,8 @@ double Func::function_fourteen(chromosome chro){
 */
 double Func::function_fifteen(chromosome chro){
 	int len = chro.S_chromosome.size();
-	double answer = 0;
-	for (int i = 0; i < len; i++){
+	double answer = abs(chro.S_chromosome[0]);
+	for (int i = 1; i < len; i++){
 		if (answer < abs(chro.S_chromosome[i]))
 			answer = abs(chro.S_chromosome[i]);
 	}
@@ -315,6 +303,38 @@ double Func::function_fifteen(chromosome chro){
 /*
 获取value的值
 */
-double Func::getValue(){
-	return value;
+double Func::getValue(chromosome chro){
+	switch (Num)
+	{
+	case 1:
+		return function_one(chro);
+	case 2:
+		return function_two(chro);
+	case 3:
+		return function_three(chro);
+	case 4:
+		return function_four(chro);
+	case 5:
+		return function_five(chro);
+	case 6:
+		return function_six(chro);
+	case 7:
+		return function_seven(chro);
+	case 8:
+		return function_eight(chro);
+	case 9:
+		return function_nine(chro);
+	case 10:
+		return function_ten(chro);
+	case 11:
+		return function_eleven(chro);
+	case 12:
+		return function_twelve(chro);
+	case 13:
+		return function_thirteen(chro);
+	case 14:
+		return function_fourteen(chro);
+	case 15:
+		return function_fifteen(chro);
+	}
 }

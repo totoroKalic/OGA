@@ -7,6 +7,7 @@
 #include <fstream>
 #include <iomanip>
 #include "chromosome.h"
+#include "function.h"
 
 class CGA {
 public:
@@ -23,9 +24,11 @@ private:
 	double pc;		// 交叉概率
 	double pm;		// 变异概率
 	int Function_num;
-	int chro_count = 0;
+	int func_evalue = 0;
 	int N;			//函数的维度，LM2的F,J_two
+	int S;
 	int LM1_row, LM1_col, LM2_row, LM2_col;       //LM1和LM2数组的横纵
+	Func num;
 
 	pool c_pool;				//G种群池
 	pool Select_pool;			//选择后的父代存储池

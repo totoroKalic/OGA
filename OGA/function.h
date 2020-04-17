@@ -1,3 +1,4 @@
+#pragma once
 #include <math.h>
 #include "chromosome.h"
 #include <random>
@@ -6,13 +7,18 @@
 
 class Func{
 public:
-	Func(int number, chromosome chro);
-	double getValue();
-	static double get_0_1_random();
-	static int get_1_A_random(int A);
-	static double get_min_max_random(double min, double max);
+	Func();
+	int Num;
+	void getNum(int number);
+	double getValue(chromosome chro);
+	double get_0_1_random();
+	int get_1_A_random(int A);
+	double get_min_max_random(double min, double max);
 private:
-	double value;
+	double X[101][101];
+	double Y[101][101];
+	double Z[101];
+
 	double function_one(chromosome chro);
 	double function_two(chromosome chro);
 	double function_three(chromosome chro);

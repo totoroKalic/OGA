@@ -6,6 +6,7 @@
 类GA的初始化
 */
 CGA::CGA(int function_num, int n, double Pc, double Pm) {
+	num.getNum(function_num);
 	Function_num = function_num;
 	N = n;
 	pc = Pc;
@@ -16,8 +17,8 @@ CGA::CGA(int function_num, int n, double Pc, double Pm) {
 //获取染色体的权值
 */
 double CGA::getValue(chromosome demo) {
-	Func num(Function_num, demo);
-	return num.getValue();
+	func_evalue++;
+	return num.getValue(demo);
 }
 
 /*
@@ -27,16 +28,27 @@ void CGA::buildinitPoption(double range_left, double range_right) {
 	//step -- one 初始化
 	c_pool.clear();
 	double ran_number, demo_value;
-	chromosome demo_chro;
 
-	for (int i = 0; i < 1000; i++) {
-		for (int j = 0; j < N; j++) {
-			ran_number = Func::get_min_max_random(range_left, range_right);
-			demo_chro.S_chromosome.push_back(ran_number);
+	if (range_right - range_left <= 100)
+		S = 10;
+	else
+		S = 20;
+
+	for (int z = 1; z <= S; z++) {
+		double left, right, single;
+		single = (range_right - range_left) / S;
+		left = range_left + (z - 1) * single;
+		right = range_right - (S - z)*single;
+		for (int i = 1; i <= G; i++) {
+			chromosome demo_chro;
+			for (int j = 0; j < N; j++) {
+				ran_number = num.get_min_max_random(left, right);
+				demo_chro.S_chromosome.push_back(ran_number);
+			}
+			demo_value = getValue(demo_chro);
+			demo_chro.S_value = demo_value;
+			c_pool.push_back(demo_chro);
 		}
-		demo_value = getValue(demo_chro);
-		demo_chro.S_value = demo_value;
-		c_pool.push_back(demo_chro);
 	}
 	selectChild();
 }
@@ -45,17 +57,17 @@ void CGA::buildinitPoption(double range_left, double range_right) {
 染色体选择进行正交交叉量化
 */
 void CGA::buildChild(chromosome parent_one, chromosome parent_two, double range_left, double range_right) {
-	chromosome demo_chro;
 	double demo_value, ran_number;
-	for (int j = 0; j < 5; j++) {
+	for (int j = 0; j < S; j++) {
+		chromosome demo_chro;
 		for (int i = 0; i < N; i++) {
-			ran_number = Func::get_min_max_random(min(parent_one.S_chromosome[i], parent_two.S_chromosome[i]), max(parent_one.S_chromosome[i], parent_two.S_chromosome[i]));
+			ran_number = num.get_min_max_random(min(parent_one.S_chromosome[i], parent_two.S_chromosome[i]), max(parent_one.S_chromosome[i], parent_two.S_chromosome[i]));
 			demo_chro.S_chromosome.push_back(ran_number);
 		}
-		double Pm = Func::get_0_1_random();
+		double Pm = num.get_0_1_random();
 		if (Pm <= pm) {
-			int position = Func::get_1_A_random(N);
-			double words = Func::get_min_max_random(range_left, range_right);
+			int position = num.get_1_A_random(N);
+			double words = num.get_min_max_random(range_left, range_right);
 			demo_chro.S_chromosome[position - 1] = words;
 		}
 		demo_value = getValue(demo_chro);
@@ -72,7 +84,7 @@ bool CGA::chooseParents() {
 	Select_pool.clear();
 	int len = c_pool.size();
 	for (int i = 0; i < len; i++) {
-		double demo = Func::get_0_1_random();
+		double demo = num.get_0_1_random();
 		if (demo <= pc) {
 			Select_pool.push_back(c_pool[i]);
 		}
@@ -195,7 +207,7 @@ chromosome CGA::get_best_chro() {
 获得这次迭代的function evaluations
 */
 int CGA::get_func_evalua() {
-	return chro_count;
+	return func_evalue;
 }
 
 /*
