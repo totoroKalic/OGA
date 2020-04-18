@@ -216,7 +216,7 @@ void CGA::showChromosome() {
 
 void CGA::print() {
 	ofstream ofile;
-	ofile.open("E:\\data.txt");
+	ofile.open("E:\\result\\data.txt");
 	int len = Tu.size();
 	for (int i = 0; i < len; i++) {
 		ofile << i << "," << Tu[i] << endl;

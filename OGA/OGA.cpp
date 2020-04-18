@@ -344,8 +344,6 @@ void OGA::run(int Maxnum, int steps, double range_left, double range_right){
 	buildinitPoption(range_left, range_right);
 	//step -- two ÏÈÖ´ĞĞMaxnum´ú
 
-	cout << "two" << endl;
-
 	for (int i = 0; i < Maxnum; i++){
 		if (chooseParents() == true){
 			if (Select_pool.size() % 2 == 1){

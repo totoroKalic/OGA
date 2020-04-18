@@ -66,34 +66,49 @@ void change(int flag, int function) {
 		{
 		case 1:
 			exchange(savePath,OGA_f1);
+			break;
 		case 2:
 			exchange(savePath,OGA_f2);
+			break;
 		case 3:
 			exchange(savePath,OGA_f3);
+			break;
 		case 4:
 			exchange(savePath,OGA_f4);
+			break;
 		case 5:
 			exchange(savePath,OGA_f5);
+			break;
 		case 6:
 			exchange(savePath,OGA_f6);
+			break;
 		case 7:
 			exchange(savePath,OGA_f7);
+			break;
 		case 8:
 			exchange(savePath,OGA_f8);
+			break;
 		case 9:
 			exchange(savePath,OGA_f9);
+			break;
 		case 10:
 			exchange(savePath,OGA_f10);
+			break;
 		case 11:
 			exchange(savePath,OGA_f11);
+			break;
 		case 12:
 			exchange(savePath,OGA_f12);
+			break;
 		case 13:
 			exchange(savePath,OGA_f13);
+			break;
 		case 14:
 			exchange(savePath,OGA_f14);
+			break;
 		case 15:
 			exchange(savePath,OGA_f15);
+			break;
 		}
 	}
 	else {
@@ -101,34 +116,49 @@ void change(int flag, int function) {
 		{
 		case 1:
 			exchange(savePath,CGA_f1);
+			break;
 		case 2:
 			exchange(savePath,CGA_f2);
+			break;
 		case 3:
 			exchange(savePath,CGA_f3);
+			break;
 		case 4:
 			exchange(savePath,CGA_f4);
+			break;
 		case 5:
 			exchange(savePath,CGA_f5);
+			break;
 		case 6:
 			exchange(savePath,CGA_f6);
+			break;
 		case 7:
 			exchange(savePath,CGA_f7);
+			break;
 		case 8:
 			exchange(savePath,CGA_f8);
+			break;
 		case 9:
 			exchange(savePath,CGA_f9);
+			break;
 		case 10:
 			exchange(savePath,CGA_f10);
+			break;
 		case 11:
 			exchange(savePath,CGA_f11);
+			break;
 		case 12:
 			exchange(savePath,CGA_f12);
+			break;
 		case 13:
 			exchange(savePath,CGA_f13);
+			break;
 		case 14:
 			exchange(savePath,CGA_f14);
+			break;
 		case 15:
-			exchange(savePath,CGA_f15);
+			exchange(savePath,CGA_f15); 
+			break;
 		}
 	}
 }
@@ -138,70 +168,100 @@ void del_func(int flag, int function) {
 		switch (function)
 		{
 		case 1:
-			remove(OGA_f1);
+			remove( OGA_f1);
+			break;
 		case 2:
-			remove(OGA_f2);
+			remove( OGA_f2);
+			break;
 		case 3:
-			remove(OGA_f3);
+			remove( OGA_f3);
+			break;
 		case 4:
-			remove(OGA_f4);
+			remove( OGA_f4);
+			break;
 		case 5:
-			remove(OGA_f5);
+			remove( OGA_f5);
+			break;
 		case 6:
-			remove(OGA_f6);
+			remove( OGA_f6);
+			break;
 		case 7:
-			remove(OGA_f7);
+			remove( OGA_f7);
+			break;
 		case 8:
-			remove(OGA_f8);
+			remove( OGA_f8);
+			break;
 		case 9:
-			remove(OGA_f9);
+			remove( OGA_f9);
+			break;
 		case 10:
-			remove(OGA_f10);
+			remove( OGA_f10);
+			break;
 		case 11:
-			remove(OGA_f11);
+			remove( OGA_f11);
+			break;
 		case 12:
-			remove(OGA_f12);
+			remove( OGA_f12);
+			break;
 		case 13:
-			remove(OGA_f13);
+			remove( OGA_f13);
+			break;
 		case 14:
-			remove(OGA_f14);
+			remove( OGA_f14);
+			break;
 		case 15:
-			remove(OGA_f15);
+			remove( OGA_f15);
+			break;
 		}
 	}
 	else {
 		switch (function)
 		{
 		case 1:
-			remove(CGA_f1);
+			remove( CGA_f1);
+			break;
 		case 2:
-			remove(CGA_f2);
+			remove( CGA_f2);
+			break;
 		case 3:
-			remove(CGA_f3);
+			remove( CGA_f3);
+			break;
 		case 4:
-			remove(CGA_f4);
+			remove( CGA_f4);
+			break;
 		case 5:
-			remove(CGA_f5);
+			remove( CGA_f5);
+			break;
 		case 6:
-			remove(CGA_f6);
+			remove( CGA_f6);
+			break;
 		case 7:
-			remove(CGA_f7);
+			remove( CGA_f7);
+			break;
 		case 8:
-			remove(CGA_f8);
+			remove( CGA_f8);
+			break;
 		case 9:
-			remove(CGA_f9);
+			remove( CGA_f9);
+			break;
 		case 10:
-			remove(CGA_f10);
+			remove( CGA_f10);
+			break;
 		case 11:
-			remove(CGA_f11);
+			remove( CGA_f11);
+			break;
 		case 12:
-			remove(CGA_f12);
+			remove( CGA_f12);
+			break;
 		case 13:
-			remove(CGA_f13);
+			remove( CGA_f13);
+			break;
 		case 14:
-			remove(CGA_f14);
+			remove( CGA_f14);
+			break;
 		case 15:
-			remove(CGA_f15);
+			remove( CGA_f15);
+			break;
 		}
 	}
 }
@@ -270,8 +330,8 @@ int main() {
 
 			if (demo >= result) {
 				demo = result;
-				del_func(1, j);
-				change(1, j);
+				del_func(2, j);
+				change(2, j);
 			}
 			remove(savePath);
 		}
