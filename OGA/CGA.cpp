@@ -51,6 +51,7 @@ void CGA::buildinitPoption(double range_left, double range_right) {
 		}
 	}
 	selectChild();
+	Tu.push_back(c_pool[0].S_value);
 }
 
 /*
@@ -132,12 +133,7 @@ void CGA::run(int Maxnum, int steps, double range_left, double range_right) {
 			}
 		}
 		selectChild();
-		/*
-		double dddd = 0;
-		for (int ll = 0; ll < G; ll++)
-			dddd += c_pool[ll].S_value;
-		Tu.push_back(dddd / G);
-		*/
+		Tu.push_back(c_pool[0].S_value);
 	}
 	int over_count = 0;
 	while (true) {
@@ -153,13 +149,6 @@ void CGA::run(int Maxnum, int steps, double range_left, double range_right) {
 						parent_two = Select_pool[Select_pool.size() - i];
 						buildChild(parent_one, parent_two, range_left, range_right);
 					}
-					selectChild();
-					/*
-					double dddd = 0;
-					for (int ll = 0; ll < G; ll++)
-						dddd += c_pool[ll].S_value;
-					Tu.push_back(dddd / G);
-					*/
 				}
 				else {
 					for (unsigned int i = 0; i < Select_pool.size() / 2; i++) {
@@ -167,14 +156,9 @@ void CGA::run(int Maxnum, int steps, double range_left, double range_right) {
 						parent_two = Select_pool[Select_pool.size() - i - 1];
 						buildChild(parent_one, parent_two, range_left, range_right);
 					}
-					selectChild();
-					/*
-					double dddd = 0;
-					for (int ll = 0; ll < G; ll++)
-						dddd += c_pool[ll].S_value;
-					Tu.push_back(dddd / G);
-					*/
 				}
+				selectChild();
+				Tu.push_back(c_pool[0].S_value);
 				now = c_pool[0].S_value;
 				if (now < last)
 					flag = 1;
@@ -187,6 +171,7 @@ void CGA::run(int Maxnum, int steps, double range_left, double range_right) {
 			break;
 		}
 	}
+	print();
 }
 
 /*

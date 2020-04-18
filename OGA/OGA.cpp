@@ -206,6 +206,7 @@ void OGA::buildinitPoption(double range_left, double range_right){
 	}
 	//step -- three 选择G个最小的S个染色体
 	selectChild();
+	Tu.push_back(c_pool[0].S_value);
 }
 
 /*
@@ -363,13 +364,7 @@ void OGA::run(int Maxnum, int steps, double range_left, double range_right){
 			}
 		}
 		selectChild();
-		cout << i <<"  "<<c_pool[0].S_value<< endl;
-		/*
-		double dddd = 0;
-		for (int ll = 0; ll < G; ll++)
-			dddd += c_pool[ll].S_value;
-		Tu.push_back(dddd / G);
-		*/
+		Tu.push_back(c_pool[0].S_value);
 	}
 	while (true){
 		double last = c_pool[0].S_value;
@@ -383,12 +378,6 @@ void OGA::run(int Maxnum, int steps, double range_left, double range_right){
 						parent_two = Select_pool[Select_pool.size() - i];
 						buildChild(parent_one, parent_two, range_left, range_right);
 					}
-					/*
-					double dddd = 0;
-					for (int ll = 0; ll < G; ll++)
-						dddd += c_pool[ll].S_value;
-					Tu.push_back(dddd / G);
-					*/
 				}
 				else{
 					for (unsigned int i = 0; i < Select_pool.size() / 2; i++){
@@ -396,14 +385,11 @@ void OGA::run(int Maxnum, int steps, double range_left, double range_right){
 						parent_two = Select_pool[Select_pool.size() - i - 1];
 						buildChild(parent_one, parent_two, range_left, range_right);
 					}
-					/*
-					double dddd = 0;
-					for (int ll = 0; ll < G; ll++)
-						dddd += c_pool[ll].S_value;
-					Tu.push_back(dddd / G);
-					*/
 				}
 				selectChild();
+				
+				Tu.push_back(c_pool[0].S_value);
+				
 				now = c_pool[0].S_value;
 				if (now < last)
 					flag = 1;
@@ -415,6 +401,7 @@ void OGA::run(int Maxnum, int steps, double range_left, double range_right){
 			break;
 		}
 	}
+	print();
 }
 
 /*
@@ -459,7 +446,7 @@ void OGA::showChromosome(){
 
 void OGA::print(){
 	ofstream ofile;
-	ofile.open("E:\\data.txt");
+	ofile.open("E:\\result\\data.txt");
 	int len = Tu.size();
 	for (int i = 0; i < len; i++){
 		ofile << i << "," << Tu[i] << endl;

@@ -1,6 +1,7 @@
 #include <vector>
 #include <cstring>
 #include <memory>
+#include <string>
 #include <algorithm>
 #include <iostream>
 #include <math.h>
